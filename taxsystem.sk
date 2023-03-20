@@ -1,0 +1,31 @@
+options:
+	tax1: 5
+  tax2: 20
+#This is the percentage of a player's balance that will be taxed. So be default it is set to a random percentage between 5% and 20%
+
+
+  balrequiredtotax: 100000
+#This is the minimum balance required for a player to be taxed
+  
+  time: 3 hours
+#Time Between every tax
+  
+
+
+
+function tax(p: player):
+	set {_t} to random integer between {@tax1} and {@tax2}
+	loop all players:
+		if loop-player's balance > {@balrequiredtotax}:
+			set {_tax} to ({_t}/100 * loop-player's balance)
+			remove {_tax} from loop-player's balance
+		broadcast "&c&lTAX &8- &fIt's that time of the day! &c%{_t}%%% &fhas been taxed from all player's with a balance above &a$100,000"
+		
+command /tax:
+	executable by: console
+	trigger:
+		tax(player)
+		
+every {@time}:
+	execute console command "/tax"
+	
