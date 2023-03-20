@@ -1,0 +1,96 @@
+options:
+	p: &6&lEVADED &8-
+	
+on join:
+	if {deathban::%player%} is true:
+		set {deathban::%player%} to false
+		set player's max health to 3
+	
+function loseHeart(p: player):
+	if {_p}'s max health > 1:
+		remove 1 from {_p}'s max health
+		send "&7You died and lost 1 heart!" to {_p}
+	else:
+		execute console command "/tban %{_p}% 3h Lost all hearts"
+		broadcast "&c&lELIMINATION &8- &c%{_p}% &fhas lost all their hearts &7&o(3 hour ban)"
+		set {deathban::%{_p}%} to true
+		
+function gainHeart(p: player):
+	if {_p}'s max health = 50:
+		send "&7You have the maximum amount of hearts! The heart has been placed in your inventory" to {_p}
+		give 1 of red dye named "&c&lHEART &7[RIGHTCLICK]" with lore "&7Rightclick to redeem!" to {_p}
+	else:
+		add 1 to {_p}'s max health
+		send "&7You gained 1 heart!" to {_p}
+		
+function useHeart(p: player):
+	if {_p}'s max health < 50:
+		add 1 to {_p}'s max health
+		remove 1 red dye named "&c&lHEART &7[RIGHTCLICK]" with lore "&7Rightclick to redeem!" from {_p}
+		send "&7You have successfully redeemed a heart!" to {_p}
+	else:
+		send "&7You have the maximum amount of hearts!" to {_p}
+
+		
+function setHearts(p: player, i: integer):
+	set {_p}'s max health to {_i}
+	send "&7Your hearts have been set to %{_i}%" to {_p}
+	
+function addHearts(p: player, i: integer):
+	if {_p}'s max health < 50:
+		add {_i} to {_p}'s max health
+		send "&7%{_i}% heart(s) have been added to your account" to {_p}
+		
+
+		
+on death:
+	victim is player
+	attacker is player
+	gainHeart(attacker)
+	loseHeart(victim)
+	
+on rightclick:
+	if event-item is red dye:
+		if name of event-item is "&c&lHEART &7[RIGHTCLICK]":
+			if lore of event-item contains "&7Rightclick to redeem!":
+				useHeart(player)
+	
+command /withdraw [<integer>]:
+	trigger:
+		if arg-1 is set:
+			if arg 1 > 0:
+				if player's max health > arg-1:
+					remove arg-1 from player's max health
+					give arg-1 of red dye named "&c&lHEART &7[RIGHTCLICK]" with lore "&7Rightclick to redeem!" to player
+					send "{@p} &fYou have successfully redeemed a &eheart&f!" to player
+				else if player's max health is equal to arg-1:
+					send "{@p} &f" to player
+				else if player's max health is less than arg-1:
+					send "%nl%&d&lLIFESTEAL &8- &cYou don't have enough hearts to withdraw &f%arg-1% hearts&c! &7(Max: %player's max health-1%)%nl%" to player
+			else if arg-1 < 1:
+				send "&d&lLIFESTEAL &8- &cYou can't withdraw &f%arg-1% heart(s)&c." to player
+		else if arg-1 isn't set:
+			send "&cIncorrect Usage! &f/withdraw (amount of hearts)"
+	
+command /addhearts [<offline player>] [<integer>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				addHearts(arg-1, arg-2)
+				send "&6[STAFF] &8- &e%player% &fadded &e%arg-2% &fhearts to &e%arg-1%" to all players where [input has permission "staff.chat"]
+				
+command /sethearts [<offline player>] [<integer>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				setHearts(arg-1, arg-2)
+				send "&6[STAFF] &8- &e%player% &fupdated &e%arg-1%'s &fhearts to &e%arg-2%" to all players where [input has permission "staff.chat"]
+				
+command /checkhearts [<offline player>]:
+	permission: lifesteal.checkhearts
+	trigger:
+		if arg-1 is set:
+			send "{@p} &e%arg-1% &fhas &e%arg-1's max health% &fhearts"
+				
