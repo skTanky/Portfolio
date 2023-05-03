@@ -1,13 +1,13 @@
 options:
 	tax1: 5
-  tax2: 20
+	tax2: 20
 #This is the percentage of a player's balance that will be taxed. So be default it is set to a random percentage between 5% and 20%
 
 
-  balrequiredtotax: 100000
+	balrequiredtotax: 100000
 #This is the minimum balance required for a player to be taxed
   
-  time: 3 hours
+	time: 3 hours
 #Time Between every tax
   
 
