@@ -1,0 +1,89 @@
+on load:
+	set {-colors::red} to formatted "&c"
+	set {-colors::blue} to formatted "<##5DBCFF>"
+	set {-colors::green} to formatted "&a"
+	set {-colors::yellow} to formatted "<##ffe649>"
+	set {-colors::pink} to formatted "<##ffb6c1>"
+	set {-colors::orange} to formatted "<##ffc355>"
+	set {-colors::white} to formatted "&7"
+	
+command /chatreaction [<string>] [<string>]:
+	trigger:
+		if player does not have permission "rank.admin":
+			"%player%" is not "<none>"
+			message(player, "red", "&7You don't have permission to use this command!")
+			stop
+		if arg 2 is not set:
+			arg 1 is "addword" or "removeword"
+			message(player, "red", "Usage: /chatreaction <type> <string>")
+			stop
+		if arg 1 is "addWord":
+			add arg 2 in proper case to {chatreactions::words::*}
+			message(player, "green", "&7Added &d%arg 2 in proper case% &7to the chat reaction words!")
+		else if arg 1 is "listWords":
+			loop {chatreactions::words::*}:
+				add "&4&l-> &d%loop-value%" to {_words::*}
+			message(player, "green", "&7Current chat reaction words are:")
+			send formatted {_words::*}
+			send nl
+		else if arg 1 is "removeWord":
+			remove arg 2 in proper case from {chatreactions::words::*}
+			message(player, "green", "&7Removed &d%arg 2 in proper case% &7from the chat reaction words!")
+		else if arg 1 is "start":
+			startChatreaction()
+
+on tab complete of "/chatreaction":
+	set tab completions for position 1 to "addWord" and "listWords" and "removeWord" and "start"
+	tab arg-1 is not "listwords" or "start":
+		set tab completions for position 2 to "word"
+
+every 8.10 minutes:
+	startChatreaction()
+
+function startChatreaction():
+	set {chatreactions::current::started} to now
+	set {chatreactions::current::word} to random element of {chatreactions::words::*}
+	set {chatreactions::current::reward} to random element of "key1" or "key2"
+	loop all players:
+		message(loop-value, "yellow", "&7First to type <##15BFE1>%{chatreactions::current::word}% &7in the chat gets a reward!")
+	wait 30 seconds
+	{chatreactions::current::*} is set
+	loop all players:
+		message(loop-value, "yellow", "&7Looks like no one got the word in time!")
+	delete {chatreactions::current::*}
+	
+on chat:
+	if message is {chatreactions::current::word}:
+		set {_r} to {chatreactions::current::reward}
+		# addQuestProgress(player, "chatreactions", 1)
+		if {_r} is "key1":
+			make console execute "crates key give %player% exotic 1"
+			set {_m} to "&a1x Exotic Crate Key"
+		else if {_r} is "key2":
+			make console execute "crates key give %player% divine 1"
+			set {_m} to "&b1x Divine Crate Key"
+		add 1 to {-player::%player's uuid%::reactionsWon}
+		set {_diff} to difference between {chatreactions::current::started} and now
+		delete {chatreactions::current::*}
+		loop all players:
+			message(loop-value, "yellow", "&d%player% &7typed the word first and got %{_m}%&7! (%prettifyTime({_diff})%)")
+		stop
+function prettifyTime(time: timespan) :: string:
+	set {_time} to "%{_time}%"
+	replace all " seconds" or " second" in {_time} with "s"
+	replace all " minutes" or " minute" in {_time} with "m"
+	replace all " hours" or " hour" in {_time} with "h"
+	replace all " days" or " day" in {_time} with "d"
+	replace all " weeks" or " week" in {_time} with "w"
+	replace all " and" or "and" or "and " or " and " in {_time} with " "
+	replace all "  " in {_time} with " "
+	return {_time}
+	
+function message(p: player, c: string, m: string):
+	send formatted split("%{-colors::%{_c}%}%&8[<##15BFE1>REACTION&8] &8- %{-colors::%{_c}%}%%{_m}%") to {_p}
+
+function split(string: string, character: string = "\") :: strings:
+	return split {_string} at {_character}
+
+
+
