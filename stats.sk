@@ -1,0 +1,48 @@
+#Note this was originally created for a Lifesteal server
+
+on join:
+	if {kills::%player's uuid%} is not set:
+		set {kills::%player's uuid%} to 0
+	if {deaths::%player's uuid%} is not set:
+		set {deaths::%player's uuid%} to 0
+
+on death:
+	attacker is player
+	victim is player
+	add 1 to {kills::%attacker's uuid%}
+	add 1 to {deaths::%victim's uuid%}
+
+          
+
+command /stats [<player>]:
+	trigger:
+		
+
+
+		if arg-1 is set:
+			set {_statGUI} to chest inventory with 3 rows named "&d&lSTATS &8- &7%arg-1%"
+			
+			set slot 10 of {_statGUI} to golden sword with attributes flag hidden named "<##ff2222>ᴋɪʟʟs" with lore "&7%{kills::%player-arg's uuid%}%"
+			set slot 11 of {_statGUI} to skeleton skull with attributes flag hidden named "<##e69138>ᴅᴇᴀᴛʜs" with lore "&7%{deaths::%player-arg's uuid%}%"
+			set slot 12 of {_statGUI} to paper with attributes flag hidden named "<##41f817>ʙᴀʟᴀɴᴄᴇ" with lore "&7%player-arg's balance%"
+			set slot 13 of {_statGUI} to heart of the sea with attributes flag hidden named "<##3183ff>ᴏʀʙs" with lore "&7%{orbs::%player-arg's uuid%}%"
+			set slot 14 of {_statGUI} to red dye with attributes flag hidden named "<##ff0000>ʜᴇᴀʀᴛs" with lore "&7%player-arg's max health%"
+			set slot 15 of {_statGUI} to Amethyst shard with attributes flag hidden named "<##5ba7e1>ʀᴀɴᴋ" with lore "%fixHex(player's prefix)%"
+			set slot 16 of {_statGUI} to name tag with attributes flag hidden named "<##c90076>ᴛᴀɢ" with lore "&7%{tag.player::%arg-1's uuid%}%"
+			open {_statGUI} to player
+		if arg-1 is not set:
+			set {_statGUI} to chest inventory with 3 rows named "&d&lSTATS &8- &7%arg-1%"
+			
+			set slot 10 of {_statGUI} to golden sword with attributes flag hidden named "<##ff2222>ᴋɪʟʟs" with lore "&7%{kills::%player's uuid%}%"
+			set slot 11 of {_statGUI} to skeleton skull with attributes flag hidden named "<##e69138>ᴅᴇᴀᴛʜs" with lore "&7%{deaths::%player's uuid%}%"
+			set slot 12 of {_statGUI} to paper with attributes flag hidden named "<##41f817>ʙᴀʟᴀɴᴄᴇ" with lore "&7%player's balance%"
+			set slot 13 of {_statGUI} to heart of the sea with attributes flag hidden named "<##3183ff>ᴏʀʙs" with lore "&7%{orbs::%player's uuid%}%"
+			set slot 14 of {_statGUI} to red dye with attributes flag hidden named "<##ff0000>ʜᴇᴀʀᴛs" with lore "&7%player's max health%"
+			set slot 15 of {_statGUI} to Amethyst shard with attributes flag hidden named "<##5ba7e1>ʀᴀɴᴋ" with lore "%fixHex(player's prefix)%"
+			set slot 16 of {_statGUI} to name tag with attributes flag hidden named "<##c90076>ᴛᴀɢ" with lore "&7%{tag.player::%player's uuid%}%"
+			open {_statGUI} to player
+
+		
+on inventory click:
+	if name of event-inventory contains "&d&lSTATS &8-":
+		cancel event
