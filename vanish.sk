@@ -1,0 +1,37 @@
+on load:
+	delete {vanish::*}
+		
+on quit:
+	if {vanish::%player%} is set:
+		delete {vanish::%player%}
+
+command /vanish [<player>]:
+	aliases: /v
+	trigger:
+		if arg-1 is not set:
+			if {vanish::%player%} is not set:
+				if player has permission "staff.vanish":
+					hide player from all players where [input does not have permission "staff.vanish"]
+					set {vanish::%player%} to true
+					set {vanish::status::%player%} to "&aEnabled"
+					send "<##AE26ED>ᴠᴀɴɪsʜ &8- <##AE26ED>%player% &fʜᴀs &aᴇɴᴀʙʟᴇᴅ &fᴠᴀɴɪsʜ" to all players where [input has permission "staff.vanish"]
+					stop
+			else if {vanish::%player%} is set:
+				if player has permission "staff.vanish":
+					reveal player from all players
+					delete {vanish::%player%}
+					set {vanish::status::%player%} to "&cDisabled"
+					send "<##AE26ED>ᴠᴀɴɪsʜ &8- <##AE26ED>%player% &fʜᴀs &cᴅɪsᴀʙʟᴇᴅ &fᴠᴀɴɪsʜ" to all players where [input has permission "staff.vanish"]				
+
+on damage:
+	attacker is player
+	{vanish::%attacker%} is set
+	cancel event
+	
+on block break:
+	{vanish::%player%} is set
+	cancel event
+
+on block interact:
+	{vanish::%player%} is set
+	cancel event
