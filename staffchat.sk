@@ -1,0 +1,30 @@
+options:
+	p: &8[<##AE26ED>&lSC&8]
+	noperm: &c&lERROR &8| &7You do not have permission to do that
+	
+command /sc [<text>]:
+	permission: staff.chat
+	permission message: {@noperm}
+	trigger:
+		if arg-1 is not set:
+			if {sc::%player%} is true:
+				set {sc::%player%} to false
+				send "{@p} &fYou have toggled &coff &fstaffchat"
+				stop
+			if {sc::%player%} is false:
+				set {sc::%player%} to true
+				send "{@p} &fYou have toggled &aon &fstaffchat"
+				stop
+			if {sc::%player%} is not set:
+				set {sc::%player%} to true
+				send "{@p} &fYou have toggled &aon &fstaffchat"
+				stop
+		else:
+			send "{@p} %fixHex(player's prefix)%%player% &8- <##AE26ED>%arg-1%" to all players where [input has permission "staff.chat"]
+			
+			
+on chat:
+	if {sc::%player%} is true:
+		cancel event
+		send "{@p} %fixHex(player's prefix)%%player% &8- <##AE26ED>%message%" to all players where [input has permission "staff.chat"]
+		stop
