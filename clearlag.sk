@@ -1,6 +1,6 @@
 options:
 	p: &c&lJANITOR &8‣
-	noperm: &cYou do not have permission to do this
+	noperm: &cYou do not have permission to do this!
 	
 function clearLagClearDropped():
 	set {droppeditems} to size of dropped items
