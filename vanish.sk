@@ -1,0 +1,38 @@
+options:
+	p: &6[STAFF]
+	
+command /vanish [<player>]:
+	aliases: /v
+	permission: staff.vanish
+	permission message: &cYou do not have permission to do this
+	trigger:
+		if player has permission "staff.vanish":
+			if arg-1 isn't set:
+				if {vanish::%player's uuid%} isn't set:
+					set {vanish::%player's uuid%} to true
+					hide player from all players where [input doesn't have permission "staff.vanish"]
+					send "{@p} &e%player% &fhas &aenabled &fvanish" to all players where [input has permission "staff.vanish"]
+					stop
+					
+				else if {vanish::%player's uuid%} is set:
+					delete {vanish::%player's uuid%}
+					reveal player
+					send "{@p} &e%player% &fhas &cdisabled &fvanish" to all players where [input has permission "staff.vanish"]
+					stop
+			
+			else if arg-1 is set:
+				if player has permission "op":
+					if {vanish::%arg-1's uuid%} isn't set:
+						set {vanish::%arg-1's uuid%} to true
+						hide arg-1 from all players where [input doesn't have permission "staff.vanish"]
+						send "{@p} &e%player% &fhas &aenabled &fvanish for &e%arg-1%" to all players where [input has permission "staff.vanish"]
+						stop
+					
+					else if {vanish::%arg-1's uuid%} is set:
+						delete {vanish::%arg-1's uuid%}
+						reveal arg-1
+						send "{@p} &e%player% &fhas &cdisabled &fvanish for &e%arg-1%" to all players where [input has permission "staff.vanish"]
+						stop
+				
+				else:
+					send "&cYou do not have permission to execute this command"
