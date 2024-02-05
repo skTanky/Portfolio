@@ -1,0 +1,211 @@
+options:
+	p: <##1BF290>&lCHATCOLOR &8‣
+	
+on join:
+	if {chatcolor::%player's uuid%} isn't set:
+		set {chatcolor::%player's uuid%} to "&7"
+
+on load:
+	set {_h_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (yellow)\""}""},SkullOwner:{Id:[I;-782066476,2074627608,-1460273272,866175978],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmExNDc0ZDg5MWQyYTY0N2VlMWFhNzliNTg5NDRhNTZlN2I4M2FiZDliN2NjMTM0ZTQyMGMxYjNhN2M0OTk4In19fQ==""}]}}}"
+	set {ChatColor::Yellow} to a player head with nbt {_h_}
+
+	set {_h1_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (cyan)\""}""},SkullOwner:{Id:[I;14876973,1830764593,-1461338814,-1983955896],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTMwMmYxNGViNjM3MTcxMTI0ZDdhOWY2ZDA1NzM3OWZiODcxMGEyY2U4ZGNjY2MwZWRkNTI5ZGJmZDk3ZTE4NyJ9fX0=""}]}}}"
+	set {ChatColor::Cyan} to a player head with nbt {_h1_}
+
+	set {_h2_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (red)\""}""},SkullOwner:{Id:[I;-63035681,225069933,-1372847351,1276459827],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTMzYTViZmM4YTJhM2ExNTJkNjQ2YTViZWE2OTRhNDI1YWI3OWRiNjk0YjIxNGYxNTZjMzdjNzE4M2FhIn19fQ==""}]}}}"
+	set {ChatColor::Red} to a player head with nbt {_h2_}
+
+	set {_h3_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (light blue)\""}""},SkullOwner:{Id:[I;22575808,1049969668,-1853590598,-2075782373],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzQzMWFlN2RjZDFlMmRkMzZjMzNhMGM5YTExNmI1NmUxNGFjZGFmMGRhZmIyYTA0OTg2ZDY1YWVhMGUzNTMxNCJ9fX0=""}]}}}"
+	set {ChatColor::Aqua} to a player head with nbt {_h3_}
+
+	set {_h4_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (blue)\""}""},SkullOwner:{Id:[I;-2076329240,-1811788377,-1423147898,1896803947],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjIxMzhlY2IzZDliODQ1YzcxZjAzOTg5MzIwM2VhMjZlNmVjMjliOGNlOWM4ZDg1MGZmZTI2MjEwYjljNTc1YyJ9fX0=""}]}}}"
+	set {ChatColor::Blue} to a player head with nbt {_h4_}
+
+	set {_h5_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (Lime)\""}""},SkullOwner:{Id:[I;-1184607709,-2103752677,-1465363347,1565039543],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjlmZGEzMDkzYzA3M2U0NDgzZDkwYzBiZjM3MjA5NDUxMWU1MTE4MGVkNTFiY2M5ZGFkYzJmZGU1MmY0ZGIzOSJ9fX0=""}]}}}"
+	set {ChatColor::Lime} to a player head with nbt {_h5_}
+
+	set {_h6_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (pink)\""}""},SkullOwner:{Id:[I;-155390861,1635730736,-1569886605,-738008451],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTVhZTYxODAyYjJhYWQ3NmI4YjIwMWFlNGI0ZWZhODYxNjEyM2VkMjNlYmE3NWE1Y2QzN2Q2Y2ExZGEzZDFlYiJ9fX0=""}]}}}"
+	set {ChatColor::Pink} to a player head with nbt {_h6_}
+
+	set {_h10_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (white)\""}""},SkullOwner:{Id:[I;1144188334,860571784,-1213118977,82451048],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2FmMDM5YmVjMWZjMWZiNzUxOTYwOTJiMjZlNjMxZjM3YTg3ZGZmMTQzZmMxODI5Nzc5OGQ0N2M1ZWFhZiJ9fX0=""}]}}}"
+	set {ChatColor::White} to a player head with nbt {_h10_}
+
+	set {_h11_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (orange)\""}""},SkullOwner:{Id:[I;-1997984127,-995802485,-1619122845,-138836828],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjEzZjc3MGIzMTI5OWM4ZTg0MDNjZWFkZGNjMTZhNzVkNjc1NDVmY2Y5NzEyMjk2YWNjNWRiOGIxZGMzY2VlOCJ9fX0=""}]}}}"
+	set {ChatColor::Orange} to a player head with nbt {_h11_}
+
+	set {_h12_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (dark green)\""}""},SkullOwner:{Id:[I;-1400241234,238175600,-1822812729,718206907],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjk0NGI0ODc5YzY5MjE2YWI5YmY1NzAwNTc3ZWU2MmIzNDk2ZWY1ZmFjOTVmOGEyZTA2NjVmNmQwYzM2YTJkYSJ9fX0=""}]}}}"
+	set {ChatColor::Green} to a player head with nbt {_h12_}
+	
+	set {_h13_} to nbt compound from "{display:{Name:""{\""text\"":\""Orb (purple)\""}""},SkullOwner:{Id:[I;-1373719332,-1935390174,-1479747192,-26163690],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTFiOWEwYTZkMWI5OTEyNzk0Mjg5ZWNhMWUyMjRlYWU2ZDc2YTdjYjc1MmNhNjg5ZjFiOTkxY2U5NzBhZGVlIn19fQ==""}]}}}"
+	set {ChatColor::Purple} to a player head with nbt {_h13_}
+
+	set {_h14_} to nbt compound from "{display:{Name:""{\""text\"":\""Bauble Ornament (rainbow)\""}""},SkullOwner:{Id:[I;1596858426,-783134958,-2065152634,400163405],Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjRiNzhjYjhmODMyMmU3NDM0MjQyNjlhODZlZDc0MzcyY2JjMjUyYzYzMzNhYmI5NWY2ODQ5NjQzNWFhMWU2OSJ9fX0=""}]}}}"
+	set {ChatColor::Rainbow} to a player head with nbt {_h14_}
+    
+	delete {chatcolors::*}
+	wait 2 ticks
+	add "&fWhite" to {chatcolors::*}
+	add "&cRed" to {chatcolors::*}
+	add "&6Orange" to {chatcolors::*}
+	add "&eYellow" to {chatcolors::*}
+	add "&aLime" to {chatcolors::*}
+	add "&2Green" to {chatcolors::*}
+	add "&3Cyan" to {chatcolors::*}
+	add "&bAqua" to {chatcolors::*}
+	add "&9Blue" to {chatcolors::*}
+	add "&5Purple" to {chatcolors::*}
+	add "&dPink" to {chatcolors::*}
+	add "&nRainbow" to {chatcolors::*}
+    
+	set {randomchatcolorvoucher} to name tag named "<##17B1E2>&lRANDOM CHATCOLOR" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ ᴠᴏᴜᴄʜᴇʀ" and "" and "&8| &7Gives you a random chatcolor!" and "" and "&8ʀɪɢʜᴛᴄʟɪᴄᴋ ᴛᴏ ʀᴇᴅᴇᴇᴍ"
+    
+command /randomchatcolorvoucher [<player>]:
+    permission: op
+    permission message: &cYou do not have permission to do this
+    trigger:
+        if arg-1 isn't set:
+            give {randomchatcolorvoucher} to player
+            
+        else:
+            give {randomchatcolorvoucher} to arg-1
+            
+            
+on rightclick:
+    if name of event-item contains "<##17B1E2>&lRANDOM CHATCOLOR":
+        set {_r} to random element out of {chatcolors::*}
+        execute console command "/lp user %player% permission set chatcolor.%uncolored {_r}% true"
+        remove 1 of event-item from player
+        send "{@p} &fYou unlocked the %{_r}%&f chatcolor!"
+
+	
+
+function chatcolor_gui(p: player):
+	create a gui with virtual chest inventory with 5 rows named "Chat Colors":
+
+		if {_p} has permission "chatcolor.white":
+			format gui slot 10 with {ChatColor::White} named "&f&lWHITE" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &fHey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&f") 
+		else:
+			format gui slot 10 with {ChatColor::White} named "&f&lWHITE" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &fHey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+
+		if {_p} has permission "chatcolor.red":
+			format gui slot 11 with {ChatColor::Red} named "&c&lRED" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &cHey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&c") 
+		else:
+			format gui slot 11 with {ChatColor::Red} named "&c&lRED" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &cHey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+
+		if {_p} has permission "chatcolor.orange":
+			format gui slot 12 with {ChatColor::Orange} named "&6&lORANGE" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &6Hey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&6") 
+		else:
+			format gui slot 12 with {ChatColor::Orange} named "&6&lORANGE" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &6Hey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+
+		if {_p} has permission "chatcolor.yellow":
+			format gui slot 13 with {ChatColor::Yellow} named "&e&lYELLOW" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &eHey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&e") 
+		else:
+			format gui slot 13 with {ChatColor::Yellow} named "&e&lYELLOW" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &eHey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+
+		if {_p} has permission "chatcolor.lime":
+			format gui slot 19 with {ChatColor::Lime} named "&a&lLIME" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &aHey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&a") 
+		else:
+			format gui slot 19 with {ChatColor::Lime} named "&a&lLIME" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &aHey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+
+		if {_p} has permission "chatcolor.green":
+			format gui slot 20 with {ChatColor::Green} named "&2&lGREEN" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &2Hey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&2") 
+		else:
+			format gui slot 20 with {ChatColor::Green} named "&2&lGREEN" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &2Hey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+
+		if {_p} has permission "chatcolor.cyan":
+			format gui slot 21 with {ChatColor::Cyan} named "&3&lCYAN" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &3Hey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&3") 
+		else:
+			format gui slot 21 with {ChatColor::Cyan} named "&3&lCYAN" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &3Hey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+
+		if {_p} has permission "chatcolor.aqua":
+			format gui slot 22 with {ChatColor::Aqua} named "&b&lAQUA" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &bHey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&b") 
+		else:
+			format gui slot 22 with {ChatColor::Aqua} named "&b&lAQUA" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &bHey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+
+		if {_p} has permission "chatcolor.blue":
+			format gui slot 28 with {ChatColor::Blue} named "&1&lBLUE" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &1Hey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&1") 
+		else:
+			format gui slot 28 with {ChatColor::Blue} named "&1&lBLUE" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &1Hey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+
+		if {_p} has permission "chatcolor.purple":
+			format gui slot 29 with {ChatColor::Purple} named "&5&lPURPLE" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &5Hey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&5") 
+		else:
+			format gui slot 29 with {ChatColor::Purple} named "&5&lPURPLE" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &5Hey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+		
+		if {_p} has permission "chatcolor.pink":
+			format gui slot 30 with {ChatColor::Pink} named "&d&lPINK" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &dHey!" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_pick({_p}, "&d") 
+		else:
+			format gui slot 30 with {ChatColor::Pink} named "&d&lPINK" with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ &dHey!" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+		
+		if {_p} has permission "chatcolor.rainbow":
+			format gui slot 31 with {ChatColor::Rainbow} named rainbow("&lRAINBOW") with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ %rainbow("Hey!")%" and "" and "&8│ &fStatus: <##4afa4a>&lUNLOCKED!" and "" and "<##1cff1c>Click here to select!":
+				chatcolor_rainbow({_p}) 
+		else:
+			format gui slot 31 with {ChatColor::Rainbow} named rainbow("&lRAINBOW") with lore "&8ᴄʜᴀᴛᴄᴏʟᴏʀ" and "" and "&7[ᴘʀᴇᴠɪᴇᴡ]" and "&8┃ %{_p}'s prefix%&f%{_p}% ‣ %rainbow("Hey!")%" and "" and "&8│ &fStatus: <##F8370a>&lLOCKED!" and "" and "<##F80a29>You don't have access to this!"
+		
+		format gui slot 16 with book named "&6&lLOCKED COLOR?" with lore "" and "&7To unlock chatcolors, purchase a" and "&7rank on our store (/buy)." and "" and "&eClick here to open store!":
+			make {_p} execute command "/store"
+			play sound "ui.button.click" with pitch 2 to {_p}
+		format gui slot 25 with structure void named "&f&lRESET" with lore "" and "&7Click here to reset your chatcolor" and "&7back to default gray." and "" and "&eClick here to clear!":
+			chatcolor_clear({_p})
+			close {_p}'s inventory
+			play sound "ui.button.click" with pitch 2 to {_p}
+		format gui slot 34 with barrier block named "&cClose":
+			close {_p}'s inventory
+
+		format gui slot 15,24,33 with black stained glass pane named "&r"
+
+	open last gui for {_p}
+
+function chatcolor_clear(p: player):
+	play sound "block.note_block.pling" with volume 1 and pitch 1 to {_p}
+	set {chatcolor::%{_p}'s uuid%} to "&7"
+	send "{@p} &fYou reset your chatcolor" to {_p}
+
+function chatcolor_pick(p: player, color: text):
+	play sound "ui.button.click" with pitch 2 to {_p}
+	close {_p}'s inventory
+	set {chatcolor::%{_p}'s uuid%} to {_color}
+	send "{@p} &fYou successfully changed your chatcolor!" to {_p}
+
+function chatcolor_rainbow(p: player):
+	play sound "ui.button.click" with pitch 2 to {_p}
+	close {_p}'s inventory
+	set {chatcolor::%{_p}'s uuid%} to "Rainbow"
+	send "{@p} &fYou successfully changed your chatcolor!" to {_p}
+
+
+
+command /chatcolor [<string>]:
+	trigger:
+		chatcolor_gui(player)
+
+		
+function decimalToHexadecimal(number: number) :: string:
+	return ("00" if {_number} <= 0, else ("FF")) if {_number} is not between 0 and 255
+	return join (character at (mod((floor({_number} / 16)), 16) + 1) in "0123456789ABCDEF") and (character at ((mod({_number}, 16)) + 1) in "0123456789ABCDEF")
+ 
+function rainbow(input: string, wrapAmount: number = -1, lightness: number = 0.5, offset: number = 0) :: string:
+	set {_delta} to 360 / ({_wrapAmount} if {_wrapAmount} > 0, else length of {_input})
+	set {_lightnessModifier} to (({_lightness}*2)-1) * 255
+	set {_angle} to 90 + ({_delta} * {_offset})
+	loop length of {_input} times:
+		set {_character} to character at loop-value in {_input}
+		if {_character} or (character at (loop-value - 1) in {_input}) is "§":
+			if "abcdefklmnor0123456789" contains {_character}:
+				set {_format} to (join {_format} and "&%{_character}%") if {_character} is not "r", else ("")
+			continue
+		set {_output} to join {_output}, "<##%decimalToHexadecimal((0.5 * (sin({_angle}) + 1)) * 255 + {_lightnessModifier})%%decimalToHexadecimal((0.5 * (sin({_angle} + 120) + 1)) * 255 + {_lightnessModifier})%%decimalToHexadecimal((0.5 * (sin({_angle} + 240) + 1)) * 255 + {_lightnessModifier})%>", {_format} and {_character}
+		remove {_delta} from {_angle}
+	return formatted {_output}
