@@ -1,0 +1,410 @@
+#Made by skTank
+
+# | Requires:
+# > Skript-placeholders
+# > skBee
+
+#Main Configuration
+
+options:
+    p: <##F82323>&lLIFESTEAL &8‣
+    color1: <##FD7171>
+    color2: &f
+    color3: &7
+    color4: &8
+    color5: &c
+    
+    heartcap: 50 #Maximum hearts a player can have
+    hearttoinv: true #Whether a heart item gets put in a player's inventory if they have the max hearts
+    startinghearts: 10
+    deathban: true #Whether a player is banned if they run out of hearts. If false, they will be put into spectator. NOTE: IF FALSE, PLEASE WILL NOT BE UN-DEATHBANNED TIL MANUALLY REVIVED
+    deathbancommand: tempban %{_p}% 3d Lifesteal | Eliminated -s
+    heartsafterdeathban: 5 #Hearts given after a player's deathban expires
+    deathbanstartingposition: -196, 68, 250 #The location a player spawns at after being revived | THIS ONLY HAPPENS WHEN A PLAYER IS REVIVED FROM BEING IN SPECTATOR | Can be coords or a variable such as {spawn::loc}
+
+    altcheck: false
+    altpunish: true
+    altpunishcommand: /ban %{_p}% Alt Checker | Anti-Boosting #Make sure the part where the player would be is set as '%{_p}%'
+
+    staffcommand: /lifesteal
+    staffcommandaliases: /ls
+    staffcommandperm: lifesteal.admin
+    staffp: <##F82323>[STAFF]
+    staffnotiperm: lifesteal.staff #Those with this permission can see notification messages
+
+    heartpay: true
+    heartcrafting: true
+
+    revive: true #Whether revive is enabled or not (CMD)
+    revivebeaconcrafting: true #Whether crafting for a physical revive item is enabled
+
+
+    #--------DO NOT EDIT--------
+    revivebeaconitem: beacon named "<##FF0606>&lBEACON OF LIFE &7[ʀɪɢʜᴛᴄʟɪᴄᴋ]" with lore "&8ʟɪғᴇsᴛᴇᴀʟ" and "" and "&8| &7This item grants it's <##FF6767>user" and "&8| &7the power of <##FF6767>revival" and "" and "&8ʀɪɢʜᴛᴄʟɪᴄᴋ"
+    heartitem: red dye named "<##EE1F1F>&lHEART &7[ʀɪɢʜᴛᴄʟɪᴄᴋ]" with lore "&8ʟɪғᴇsᴛᴇᴀʟ" and "" and "&8| &7Rightclick to gain" and "&8| <##F36E6E>1 heart" and "" and "&8ʀɪɢʜᴛᴄʟɪᴄᴋ"
+
+
+#-----Events-----
+
+
+on join:
+    if {-lifesteal::registered::*} doesn't contain player's uuid:
+        add player's uuid to {-lifesteal::registered::*}
+        set {-lifesteal::hp::%player's uuid%} to {@startinghearts}
+
+on rightclick:
+    if event-item is {@heartitem}:
+        redeemHeart(player)
+
+on join:
+    if {deathban::ban::%player's uuid%} is set:
+        delete {deathban::ban::%player's uuid%}
+        remove player's uuid from {deathban::players::*}
+        set player's max health to {@heartsafterdeathban}
+        set {-lifesteal::hp::%{_p}'s uuid%} to {@heartsafterdeathban}
+
+on join:
+    if {revived::%player's uuid%} is set:
+        delete {revived::%player's uuid%}
+        set player's gamemode to survival
+        execute console command "/{@staffcommand} setheart %player% {@startinghearts}"
+
+on inventory click:
+    if name of event-inventory contains "Recipe > Revive Beacon":
+        cancel event
+
+on death:
+    victim is a player
+    attacker is a player
+    lifesteal_RegisterSteal(victim, attacker)
+
+on tab complete:
+    event-string is "/recipe"
+    set tab completions for position 1 to "revivebeacon"
+
+on tab complete:
+    event-string is "{@staffcommand}" or "{@staffcommandaliases}"
+    set tab completions for position 1 to "setheart", "addheart", "takeheart", "giveheart", "giverevivebeacon" and "checkheart"
+    set tab completions for position 2 to all players
+
+on rightclick:
+    if event-item is beacon:
+        if name of event-item contains "<##FF0606>&lBEACON OF LIFE":
+            add 1 to {revives::%player's uuid%}
+            remove 1 of event-item from player
+            send "{@p} {@color2}You redeemed a <##FF0606>&lBEACON OF LIFE{@color2}! {@color3}&o(Total Revives: %{revives::%player's uuid%}%)"
+
+
+#-----Main Functions-----
+
+
+function lifesteal_LoseHeart(p: player):
+    if {_p}'s max health = 1:
+        if {@deathban} = true:
+            execute console command "/{@deathbancommand}"
+            broadcast "{@p} {@color1}%{_p}% {@color2}has been {@color1}&lELIMINATED"
+            set {deathban::ban::%{_p}'s uuid%} to true
+            add {_p}'s uuid to {deathban::players::*}
+            set {-lifesteal::hp::%{_p}'s uuid%} to 0
+
+        else if {@deathban} = false:
+            set {_p}'s gamemode to spectator
+            set {deathban::ban::%{_p}'s uuid%} to true
+            add {_p}'s uuid to {deathban::players::*}
+            broadcast "{@p} {@color1}%{_p}% {@color2}has been {@color1}&lELIMINATED"
+
+    else if {_p}'s max health > 1:
+        reduceHeart({_p}, 1)
+        send "{@p} {@color2}You died and lost {@color1}1 heart{@color2}!" to {_p}
+
+function lifesteal_GainHeart(p: player):
+    if {_p}'s max health = {@heartcap}:
+        if {@hearttoinv} = true:
+            give 1 of {@heartitem} to {_p}
+            send "{@p} {@color1}1 heart {@color2}has been placed in your inventory" to {_p}
+
+        else:
+            send "{@p} {@color2}You didn't gain a {@color1}heart {@color2}as you are at the max hearts {@color3}&o(Max: {@heartcap})" to {_p}
+
+    else:
+        increaseHeart({_p}, 1)
+        send "{@p} {@color2}You gained {@color1}1 heart" to {_p}
+
+function lifesteal_RegisterSteal(v: player, a: player):
+    lifesteal_LoseHeart({_v})
+    lifesteal_GainHeart({_a})
+    remove 1 from {-lifesteal::hp::%{_v}'s uuid%}
+    add 1 to {-lifesteal::hp::%{_a}'s uuid%}
+
+function lifesteal_Admin_SetHeart(e: player, p: player, a: integer):
+    if {_a} > {@heartcap}:
+        send "{@p} {@color5}You cannot set a player's hearts more than the max! {@color3}&o(Max: {@heartcap})" to {_e}
+
+    else:
+        set {_p}'s max health to {_a}
+        set {-lifesteal::hp::%{_p}'s uuid%} to {_a}
+        send "{@p} {@color2}You set {@color1}%{_p}%'s {@color2}hearts to {@color1}%{_a}%" to {_e}
+        send "{@p} {@color2}Your hearts have been set to {@color1}%{_a}%" to {_p}
+        send "{@staffp} {@color1}%{_e}% {@color2}set {@color1}%{_p}%'s {@color2}hearts to {@color1}%{_a}%" to all players where [input has permission "{@staffnotiperm}"]
+
+function lifesteal_Admin_AddHeart(e: player, p: player, a: integer):
+    set {_t} to ({_p}'s max health + {_a})
+    if {_t} > {@heartcap}:
+        send "{@p} {@color5}You cannot add that many hearts to a player! {@color3}&o(Max: {@heartcap})" to {_e}
+
+    else:
+        set {_i} to ({_a} / 2)
+        increaseHeart({_p}, {_a})
+        send "{@p} {@color2}You added {@color1}%{_a}% {@color2}hearts to {@color1}%{_p}%" to {_e}
+        send "{@p} {@color1}%{_a}% {@color2}heart(s) have been added to {@color1}you" to {_p}
+        send "{@staffp} {@color1}%{_e}% {@color2}added {@color1}%{_a}% {@color2}hearts to {@color1}%{_p}%" to all players where [input has permission "{@staffnotiperm}"]
+        
+function lifesteal_Admin_TakeHeart(e: player, p: player, a: integer):
+    set {_t} to ({_p}'s max health - {_a})
+    if {_t} >= 1:
+        reduceHeart({_p}, {_a})
+        send "{@p} {@color2}You took {@color1}%{_a}% {@color2}hearts from {@color1}%{_p}%" to {_e}
+        send "{@p} {@color1}%{_a}% {@color2}heart(s) have been taken from {@color1}you" to {_p}
+        send "{@staffp} {@color1}%{_e}% {@color2}took {@color1}%{_a}% {@color2}hearts from {@color1}%{_p}%" to all players where [input has permission "{@staffnotiperm}"]
+    
+    else:
+        send "{@p} {@color2}You cannot take that many hearts from that player!" to {_e}
+
+function lifesteal_Admin_GiveHeart(e: player, p: player, a: integer):
+    give {_a} of {@heartitem} to {_p}
+    send "{@p} {@color2}You gave {@color1}%{_a}% heart item(s) {@color2}to {@color1}%{_p}%" to {_e}
+
+function redeemHeart(p: player):
+    if {-lifesteal::hp::%{_p}'s uuid%} = 50:
+        send "{@p} {@color2}You cannot redeem any hearts as you are at the max!" to {_p}
+
+    else:
+        remove 1 of {@heartitem} from {_p}
+        add 1 to {-lifesteal::hp::%{_p}'s uuid%}
+        increaseHeart({_p}, 1)
+        send "{@p} {@color2}You redeemed {@color1}a heart{@color2}!" to {_p}
+
+function increaseHeart(p: player, a: integer):
+    add {_a} to {-lifesteal::hp::%{_p}'s uuid%}
+    add {_a} to {_p}'s max health
+
+function reduceHeart(p: player, a: integer):
+    remove {_a} from {-lifesteal::hp::%{_p}'s uuid%}
+    remove {_a} from {_p}'s max health
+
+function getHeart(p: player) :: integer:
+    return {-lifesteal::hp::%{_p}'s uuid%}
+
+function giveReviveBeacon(e: player, p: player, a: integer):
+    give {_a} of {@revivebeaconitem} to {_p}
+    send "{@p} {@color2}You gave {@color1}%{_a}% revive beacon(s) {@color2}to {@color1}%{_p}%" to {_e}
+
+function lifesteal_PrintHelp(p: player):
+    send "{@color4}&m----------&r {@p} {@color3}Help (By skTank <3) {@color4}&m----------" to {_p}
+    send "{@color2}/lifesteal setheart <player> <amount>" to {_p}
+    send "{@color2}/lifesteal addheart <player> <amount>" to {_p}
+    send "{@color2}/lifesteal removeheart <player> <amount>" to {_p}
+    send "{@color2}/lifesteal giveheart <player> <amount>" to {_p}
+    send "{@color2}/lifesteal checkheart <player>" to {_p}
+    send "{@color2}/lifesteal giverevivebeacon <player> <amount>" to {_p}
+    send "{@color4}&m------------------------------------------------" to {_p}
+
+function lifesteal_GetRecipe(p: player, t: text):
+    {_t} = "revivebeacon":
+        set {_gui} to chest inventory with 3 rows named "Recipe > Revive Beacon"
+        set slot (integers between 0 and 30) of {_gui} to gray stained glass pane named "&b"
+        set slot 3,5,21,23 of {_gui} to diamond block named "{@color1}&lDIAMOND BLOCK"
+        set slot 4,22 of {_gui} to red dye named "{@color1}&lHEART"
+        set slot 12,14 of {_gui} to totem of undying named "{@color1}&lTOTEM OF UNDYING"
+        set slot 13 of {_gui} to beacon named "{@color1}&lBEACON"
+        open {_gui} to {_p}
+
+
+#-----Game Functions-----
+
+
+function heartPay(s: player, r: player, a: integer):
+    if {@heartpay} = true:
+        if {@altcheck} = true:
+            if {_s}'s ip address = {_r}'s ip address:
+                if {@altpunish} = true:
+                    execute console command "{@altpunishcommand}"
+                    stop
+            
+                else:
+                    send "{@p} {@color2}You cannot do that as you have the same IP as {@color1}%{_r}%" to {_s}
+                    send "{@staffp} {@color5}&lWARNING: {@color1}%{_s}% {@color2}attempted to boost%{_r}% {@color1}%{_r}% {@color2}using heartpay!" to all players where [input has permission "{@staffnotiperm}"]
+                    stop
+
+            else:
+                if ({-lifesteal::hp::%{_r}'s uuid%} + {_a}) isn't more than {@heartcap}:
+                    if ({-lifesteal::hp::%{_s}'s uuid%} - {_a}) isn't less than 1:
+                        reduceHeart({_s}, {_a})
+                        increaseHeart({_r}, {_a})
+                        send "{@p} {@color2}You gave {@color1}%{_a}% heart(s) {@color2}to {@color1}%{_r}%" to {_s}
+                        send "{@p} {@color2}You received {@color1}%{_a}% heart(s) {@color2}from {@color1}%{_s}%" to {_r}
+        else:
+            if ({-lifesteal::hp::%{_r}'s uuid%} + {_a}) isn't more than {@heartcap}:
+                if ({-lifesteal::hp::%{_s}'s uuid%} - {_a}) isn't less than 1:
+                    reduceHeart({_s}, {_a})
+                    increaseHeart({_r}, {_a})
+                    send "{@p} {@color2}You gave {@color1}%{_a}% heart(s) {@color2}to {@color1}%{_r}%" to {_s}
+                    send "{@p} {@color2}You received {@color1}%{_a}% heart(s) {@color2}from {@color1}%{_s}%" to {_r}
+    else:
+        send "{@p} &fHeart pay isn't enabled!" to {_s}
+
+
+#-----Commands-----
+
+
+command {@staffcommand} [<text>] [<offline player>] [<integer>]:
+    permission: {@staffcommandperm}
+    permission message: &cYou do not have permission to do this
+    aliases: {@staffcommandaliases}
+    trigger:
+        if arg-1 isn't set:
+            lifesteal_PrintHelp(player)
+            stop
+        
+        if arg-1 isn't "sethearts" or "setheart" or "addhearts" or "addheart" or "takehearts" or "takeheart" or "reducehearts" or "reduceheart" or "removehearts" or "removeheart" or "giveheart" or "checkheart" or "checkhearts" or "giverevivebeacon":
+            lifesteal_PrintHelp(player)
+            stop
+
+        if arg-1 is "sethearts" or "setheart":
+            if arg-2 is set:
+                if arg-3 is set:
+                    lifesteal_Admin_SetHeart(player, arg-2, arg-3)
+                else:
+                    send "{@p} {@color2}Please specify the {@color1}amount {@color2}of {@color1}hearts"
+                    stop
+            else:
+                send "{@p} {@color2}Please specify a {@color1}player"
+                stop
+
+        if arg-1 is "addhearts" or "addheart":
+            if arg-2 is set:
+                if arg-3 is set:
+                    lifesteal_Admin_AddHeart(player, arg-2, arg-3)
+                else:
+                    send "{@p} {@color2}Please specify the {@color1}amount {@color2}of {@color1}hearts"
+                    stop
+            else:
+                send "{@p} {@color2}Please specify a {@color1}player"
+                stop
+
+        if arg-1 is "takehearts" or "takeheart" or "reducehearts" or "reduceheart" or "removehearts" or "removeheart":
+            if arg-2 is set:
+                if arg-3 is set:
+                    lifesteal_Admin_TakeHeart(player, arg-2, arg-3)
+                else:
+                    send "{@p} {@color2}Please specify the {@color1}amount {@color2}of {@color1}hearts"
+                    stop
+            else:
+                send "{@p} {@color2}Please specify a {@color1}player"
+                stop
+
+        if arg-1 is "giveheart":
+            if arg-2 is set:
+                if arg-3 is set:
+                    lifesteal_Admin_GiveHeart(player, arg-2, arg-3)
+                else:
+                    send "{@p} {@color2}Please specify the {@color1}amount {@color2}of {@color1}hearts {@color2}to give"
+                    stop
+            else:
+                send "{@p} {@color2}Please specify a {@color1}player"
+                stop
+
+        if arg-1 is "checkheart" or "checkhearts":
+            if arg-2 is set:
+                send "{@p} {@color1}%arg-2% {@color2}has {@color1}%getHeart(arg-2)% {@color2}hearts"
+            else:
+                send "{@p} {@color2}Please specify a {@color1}player"
+
+        if arg-1 is "giverevivebeacon":
+            if arg-2 is set:
+                if arg-3 is set:
+                    giveReviveBeacon(player, arg-2, arg-3)
+                else:
+                    send "{@p} {@color2}Please specify the {@color1}amount {@color2}of {@color1}revive beacons {@color2}to give"
+                    stop
+            else:
+                send "{@p} {@color2}Please specify a {@color1}player"
+
+command /heartpay [<player>] [<integer>]:
+    aliases: /heartspay, /payhearts, /payheart
+    trigger:
+        if arg-1 is set:
+            if arg-2 is set:
+                heartPay(player, arg-1, arg-2)
+            else:
+                send "{@p} {@color2}Please specify the amount of hearts to pay"
+                stop
+        else:
+            send "{@p} {@color2}Please specify a {@color1}player"
+
+command /recipe [<text>]:
+    trigger:
+        if arg-1 is "revivebeacon" or "revive":
+            lifesteal_GetRecipe(player, "revivebeacon")
+
+command /revive [<offline player>]:
+    trigger:
+        if {@revive} = true:
+            if {deathban::ban::%arg-1's uuid%} is set:
+                if {deathban::players::*} contains arg-1's uuid:
+                    if {revives::%player's uuid%} > 0:
+                        remove 1 from {revives::%player's uuid%}
+                        delete {deathban::ban::%arg-1's uuid%}
+                        remove arg-1's uuid from {deathban::players::*}
+                        if {@deathban} = true:
+                            execute console command "/unban %arg-1% Revived by %player% -s"
+                            execute console command "/lifesteal setheart %arg-1% {@heartsafterdeathban}"
+                            broadcast "{@p} {@color1}%arg-1% {@color2}has been revived by {@color1}%player%{@color2}!"
+
+                        else:
+                            set arg-1's gamemode to survival
+                            execute console command "/lifesteal setheart %arg-1% {@heartsafterdeathban}"
+                            broadcast "{@p} {@color1}%arg-1% {@color2}has been revived by {@color1}%player%{@color2}!"
+                            if arg-1 is not online:
+                                set {revived::%arg-1's uuid%} to true
+                    else:
+                        send "{@p} {@color2}You do not have enough revives! Get more revives from redeeming revive beacons!"
+                else:
+                    send "{@p} {@color1}%arg-1% {@color2}is not {@color1}&lELIMINATED"
+                    stop
+            else:
+                send "{@p} {@color1}%arg-1% {@color2}is not {@color1}&lELIMINATED"
+                stop
+
+command /eliminate [<offline player>]:
+    permission: op
+    permission message: {@color5}You do not have permission to do this
+    trigger:
+        if arg-1 is set:
+            if {deathban::ban::%arg-1's uuid%} is set:
+                send "{@p} {@color2}That player is already {@color1}&lELIMINATED"
+                stop
+
+            else:
+                set {_p} to arg-1
+                set {deathban::ban::%arg-1's uuid%} to true
+                add arg-1's uuid to {deathban::players::*}
+                execute console command "/{@deathbancommand}"
+                broadcast "{@p} {@color1}%arg-1% {@color2}has been {@color1}&lELIMINATED"
+        else:
+            send "{@p} {@color2}Please provide a player to eliminate"
+
+
+#-----Revive-----
+
+
+on load:
+    if {@revivebeaconcrafting} is true:
+        set {_r1} to diamond block
+        set {_r2} to totem of undying
+        set {_r3} to beacon
+        set {_r4} to {@heartitem}
+        register new shaped recipe for {@revivebeaconitem} using {_r1}, {_r4}, {_r1}, {_r2}, {_r3}, {_r2}, {_r1}, {_r4} and {_r1} with id "revivebeacon"
+
+
+        
