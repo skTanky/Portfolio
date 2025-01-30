@@ -1,0 +1,42 @@
+options:
+    # MESSAGES CONFIGURATION
+    p: <##ff2121>&lCOMBATLOG &8‣
+
+    # COLORS CONFIGURATION
+    color_main: &f
+    color_second: &7
+    color_third: &e
+    color_separator: &8
+    color_error: &c
+    color_success: &a
+
+on damage:
+    if attacker is a player:
+        if victim is a player:
+            combatLog()
+
+function combatLog(victim: player, attacker: player):
+    set {combatlog::%{_victim}'s uuid%} to true
+    set {combatlog::%{_attacker}'s uuid%} to true
+
+    set {_timer} to 15
+    while {_timer} isn't 0:
+        wait 1 second
+        remove 1 from {_timer}
+        send action bar "{@color_main}You are in combat, {@color_error}DO NOT {@color_main}log out. {@color_second}&o%{_timer}% seconds" to {_victim}
+        send action bar "{@color_main}You are in combat, {@color_error}DO NOT {@color_main}log out. {@color_second}&o%{_timer}% seconds" to {_attacker}
+
+    delete {combatlog::%{_victim}'s uuid%}
+    delete {combatlog::%{_attacker}'s uuid%}
+    send "{@p} {@color_main}You are now out of {@color_error}combat{@color_main}. You may log out" to {_victim}
+    send "{@p} {@color_main}You are now out of {@color_error}combat{@color_main}. You may log out" to {_attacker}
+
+
+on quit:
+    if {combatlog::%player's uuid%} is set:
+        broadcast "{@color_error}%player% {@color_second}has logged out whilst in {@color_error}combat"
+
+on join:
+    if {combatlog::%player's uuid%} is set:
+        kill player
+        send "{@p} {@color_main}You have been {@color_error}killed {@color_main}due to logging whilst in combat in your {@color_error}last session" 
