@@ -1,0 +1,79 @@
+options:
+    # MESSAGES CONFIGURATION
+    p: <##F9AC3D>&lREPORTS &8‣
+    reports_lore1: &8ʀᴇᴘᴏʀᴛ ᴜsᴇʀ
+    reports_lore2: &8ʀɪɢʜᴛᴄʟɪᴄᴋ ᴛᴏ ʀᴇᴘᴏʀᴛ
+
+    # COLORS CONFIGURATION
+    color_main: &f
+    color_second: &7
+    color_third: &e
+    color_fourth: <##F9AC3D>
+    color_separator: &8
+    color_error: &c
+    color_success: &a
+
+    # PERMISSIONS CONFIGURATION
+    reportsNotify_perm: reports.view               # Permission which allows staff to view reports in chat
+
+function open_ReportsGUI(reporter: player, reported: player, gui: text, reportReason: text):
+    {_gui} = "category":
+        create a new gui with virtual chest inventory with 3 rows named "Reports > Select Category":
+            format gui slot (integers between 0 and 30) with gray stained glass pane named "&b"
+            format gui slot 12 with ghast tear named "<##ff2727>&lREPORT GAMEPLAY OFFENSE":
+                open_ReportsGUI({_reporter}, {_reported}, "report_gameplay", "N/A")
+            format gui slot 14 with feather named "<##fff827>&lREPORT CHAT OFFENSE":
+                open_ReportsGUI({_reporter}, {_reported}, "report_chat", "N/A")
+
+        open last gui to {_reporter}
+
+    {_gui} = "report_gameplay":
+        create a new gui with virtual chest inventory with 4 rows named "Reports > Chat Offense":
+            format gui slot (integers between 0 and 40) with gray stained glass pane named "&b"
+            format gui slot 10 with iron sword named "<##ff4747>&lUNFAIR ADVANTAGES" with lore "{@reports_lore1}" and "" and "&8| {@color_second}Click to report the player for:" and "&8| {@color_main}Unfair Advantages" and "" and "{@reports_lore2}":
+                open_ReportsGUI({_reporter}, {_reported}, "report_confirm", "Unfair Advantages")
+
+        open last gui to {_reporter}
+
+    {_gui} = "report_confirm":
+        create a new gui with virtual hopper inventory named "Confirm Report":
+            format gui slot (integers between 0 and 9) with gray stained glass pane named "&b"
+            format gui slot 4 with lime wool named "{@color_success}&lCONFIRM REPORT" with lore "{@reports_lore1}" and "" and "{@color_separator}| {@color_second}Click to report {@color_main}%{_reported}% {@color_second}for:" and "{@color_separator}| {@color_main}%{_reportReason}%":
+                submitReport({_reporter}, {_reported}, {_reportReason})
+
+
+    {_gui} = "report_staff_reports":
+        create a new gui with virtual chest inventory with 6 rows named "Reports":
+            set {_slot} to 0
+            loop 45 times:
+                format gui slot {_slot} with {_reportsGUI::items::%{_slot}%}
+                set {_slot} to ({_slot} + 1)
+
+        open last gui to {_reporter}
+
+function generateReport_ID() :: string:
+    set {_letters::*} to "abcdefghijklmnopqrstuvwxyz" split by ""
+    set {_letter1} to random element out of {_letters::*} in proper case
+    set {_letter2} to random element out of {_letters::*} in proper case
+    set {_num} to random integer between 1111 and 9999
+    set {_id} to concat(concat({_letter1}, {_letter2}), {_num})
+    add {_id} to {reports::ids::*}
+    return {_id}
+
+function submitReport(reporter: player, reported: player, reportReason: text):
+    set {_time} to now
+    set {_id} to generateReport_ID()
+    set {reports::%{_id}%::time} to now
+
+    set {_item} to book
+    set name of {_item} to "<##ff0e0e>&lREPORT %{_id}%"
+    set lore of {_item} to "{@color_separator}ʀᴇᴘᴏʀᴛ" and "" and "{@color_separator}| {@color_main}Reported: <##ff5757>%{_reported}%" and "{@color_separator}| {@color_main}Reporter: <##ff5757>%{_reporter}%" and "{@color_separator}| {@color_main}Reason: <##ff5757>%{_reportReason}%" and "{@color_separator}| {@color_main}Submitted: <##ff5757>%difference between now and {report::%{_id}%::time}%" and "" and "{@color_separator}ᴄʟɪᴄᴋ ᴛᴏ ᴅᴇʟᴇᴛᴇ"
+    
+    add {_item} to {_reportsGUI::items::*}
+
+    add uuid of {_reported} to {reports::all::*}
+
+    send "" to all players where [input has permission "{@reportsNotify_perm}"]
+    send "{@color_fourth}%{_reported}% {@color_main}has been reported by {@color_fourth}%{_reporter}%" to all players where [input has permission "{@reportsNotify_perm}"]
+    send "{@color_main}Reason: {@color_third}%{_reportReason}%" to all players where [input has permission "{@reportsNotify_perm}"]
+    send "" to all players where [input has permission "{@reportsNotify_perm}"]
