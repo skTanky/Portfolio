@@ -1,0 +1,103 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+options:
+    # MESSAGES CONFIGURATION
+    p: <##F9AC3D>&lTPA &8‣
+    #message_borders: &8&m                                                &r
+
+    # COLORS CONFIGURATION
+    color_main: &f
+    color_second: &7
+    color_third: &e
+    color_separator: &8
+    color_error: &c
+    color_success: &a
+
+on load:
+    if {tpa::requests::allow::%player's uuid%} isn't set:
+        set {tpa::requests::allow::%player's uuid%} to true
+
+on join:
+    if {tpa::requests::allow::%player's uuid%} isn't set:
+        set {tpa::requests::allow::%player's uuid%} to true
+
+function tpaSendRequest(sender: player, receiver: player):
+    if {tpa::request::%{_sender}'s uuid%} isn't set:
+        if {tpa::requests::allow::%{_receiver}'s uuid%} is true:
+            set {tpa::request::%{_sender}'s uuid%} to {_receiver}'s uuid
+            add {_sender}'s uuid to {tpa::requests::%{_receiver}'s uuid%}
+            
+            send "{@p} {@color_main}You have {@color_success}successfully {@color_main}sent a TPA request to {@color_third}%{_receiver}%" to {_sender}
+            send "{@p} {@color_third}%{_sender}% {@color_main}has sent you a TPA request. {@color_second}&o(/tpa <accept/deny> %{_sender}%)" to {_receiver}
+
+        else:
+            send "{@p} {@color_third}%{_receiver}% {@color_main}has TPA requests {@color_error}&lDISABLED" to {_sender}
+    else:
+        send "{@p} {@color_main}You {@color_third}already {@color_main}have a pending unaccepted TPA requests. {@color_second}&o(/tpa cancel)" to {_sender}
+
+function tpaAccept(sender: player, receiver: player):
+    if {tpa::requests::%{_receiver}'s uuid%} contains {_sender}'s uuid:
+        send "{@p} {@color_main}Your TPA request to {@color_third}%{_receiver}% {@color_main}has been {@color_success}&lACCEPTED" to {_sender}
+        send "{@p} {@color_main}You have {@color_success}&lACCEPTED {@color_main}the TPA request from {@color_third}%{_sender}%" to {_receiver}
+        send "{@p} {@color_main}Teleporting in {@color_third}3 seconds{@color_main}..." to {_sender}
+        wait 3 seconds
+        teleport {_sender} to {_receiver}
+        send "{@p} {@color_main}You have been {@color_third}teleported{@color_main}!" to {_sender}
+        remove {_sender}'s uuid from {tpa::requests::%{_receiver}'s uuid%}
+        delete {tpa::request::%{_sender}'s uuid%}
+    else:
+        send "{@p} {@color_main}You do not have a pending TPA request from {@color_third}%{_sender}%" to {_receiver}
+
+function tpaDeny(sender: player, receiver: player):
+    if {tpa::requests::%{_receiver}'s uuid%} contains {_sender}'s uuid:
+        send "{@p} {@color_main}You have {@color_error}&lDENIED {@color_main}the TPA request from {@color_third}%{_sender}%" to {_receiver}
+        send "{@p} {@color_main}Your TPA request to {@color_third}{@color_third}%{_receiver}% {@color_main}has been {@color_error}&lDENIED" to {_sender}
+        delete {tpa::request::%{_sender}'s uuid%}
+        remove {_sender}'s uuid from {tpa::requests::%{_receiver}'s uuid%}
+    else:
+        send "{@p} {@color_main}You do not have a pending TPA request from {@color_third}%{_sender}%" to {_receiver}
+    
+
+function tpaCancel(sender: player, receiver: player):
+    send "{@p} {@color_main}You have {@color_error}CANCELLED {@color_main}your TPA request to {@color_third}%{_receiver}%" to {_sender}
+    send "{@p} {@color_third}%{_sender}% {@color_main}has {@color_error}&lCANCELLED {@color_main}their TPA request to you" to {_receiver}
+    delete {tpa::request::%{_sender}'s uuid%}
+    delete {tpa::requests::%{_receiver}'s uuid%}
+
+command /tpa [<text>] [<player>]:
+    trigger:
+        if arg-1 is player:     #SEND REQ
+            set {_player} to arg-1 parsed as player
+            tpaSendRequest(player, {_player})
+
+        if arg-1 is "accept":
+            if arg-2 is set:
+                tpaAccept(arg-2, player)
+
+        if arg-1 is "deny":
+            if arg-2 is set:
+                tpaDeny(arg-2, player)
+
+        if arg-1 is "cancel":
+            if arg-2 is set:
+                tpaCancel(player, arg-2)
+
+on tab complete:
+    event-string is "/tpa"
+
+    set tab completion for position 1 to all players, "accept", "deny" and "cancel"
